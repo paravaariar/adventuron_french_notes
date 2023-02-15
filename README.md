@@ -80,6 +80,10 @@ subroutines {
       : if (verb_is "me" || verb_is "te" || verb_is "se" || verb_is "nous" || verb_is "vous") {
          : if (noun1_is "regarder" || noun1_is "examiner") {
             : set_sentence "examiner moi";
+            // (noun1_is "tirer" || !noun2_is "") did not work so we check the exact sentence
+         } : else_if (noun1_is "casser" || sentence_raw() == "me tirer" || sentence_raw() == "te tirer" || sentence_raw() == "se tirer" || sentence_raw() == "nous tirer" || sentence_raw() == "vous tirer") {
+            : set_sentence "sortir";
+            // for the case of "se tirer une balle"
          } : else_if (noun1_is "tirer") {
             : set_sentence "mourir";
          } : else {
@@ -92,6 +96,53 @@ subroutines {
 
 When the verb starts with vowel, for example S’EXAMINER, this will not work, but you can still match it in your on_command code, ignoring the ‘, for instance using
 `: match " sexaminer _; mexaminer _" {  }`
+
+## Game restart or exit
+Game restart
+FIN is the spanish command to quit the game, which actually is like restarting the game. With the default behaviour of Adventuron the player will be asked if they want to quit but it expects "s" for Yes or "n" for No. The workaround is to create a synonym
+
+```
+   : verb aliases = [fin, recommencer, redémarrer, redémarrage, restart, quit];
+```
+
+and then, in the main on_command you can add
+
+```
+   : match "fin -" {
+      : add_choice "Oui"  {
+         : lose_game;
+      }
+      : add_choice "No"  {
+         : done;
+      }
+      : choose "<Souhaitez-vous recommencer le jeu ?<6>>" ;
+   }
+```
+
+## Articles
+
+When the noun starts with vowel, like "arbre", or sounds like a vowel "homme", the article is "l'arbre" or "l'homme". When the player introduces "l'arbre", Adventuron will automatically translate it to "larbre" ignoring the ' symbol. The workaround is to add a synonym if the noun is used in several places
+```
+   : noun aliases = [arbre, larbre];
+   : noun aliases = [ennemi, lennemi];
+```
+
+or repeating it in the match command if the noun is not used several times
+
+```
+: match "grimper arbre; grimper larbre" {
+
+}
+```
+
+Of course, this can led to recognizing strange sentences like "grimper le larbre" but it will allow players to use "l'arbre" while playing.
+
+You can also add
+```
+   : noun aliases = [e, est, lest];
+   : noun aliases = [o, ouest, louest];
+```
+if you want to allow players to write things like "aller à l'est"
 
 ## Popup menu in desktop mode
 In desktop mode, when you right click the screen, a pop-up menu appears which is written in Spanish. You can try to translate it directly in the generated html or you can just deactivate it. For this you should add this in the generated html just after the other existing <style> … </style> entry. (Thanks eツ for this code)
