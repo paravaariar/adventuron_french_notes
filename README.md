@@ -249,3 +249,39 @@ Also notice that accents are not displayed in the html strings. For example vac�
 
 `vac\xEDo` -> vide
 
+These are some strings to be replaced regarding the Save and Load games:
+
+`Guardar partida` -> Sauvegarder la partie
+
+`vac\xEDo` -> vide
+
+`Volver al juego` -> Retour au jeu
+
+`no hacer nada` -> ne rien faire
+
+`Cancelada.` -> Annulé.
+
+`Juego Guardado En La Ranura` -> Le jeu a été sauvegardé dans le slot
+
+`\xBFSobreescribir el contenido guardado en la ranura` -> Remplacer le contenu enregistré dans le slot
+
+`Cargar juego` -> Charger une partie
+
+`Ranura no v\xE1lida.` -> Slot invalide
+
+`\xBFEst\xE1s seguro de que deseas terminar el juego actual y cargar desde la ranura` -> Êtes-vous sûr de vouloir terminer le jeu en cours et charger le slot
+
+## Directions
+I did not try this, but apparently this can be a better way to translate directions.
+
+```
+themes {
+   mytheme : theme {
+      # order of the compass directions matters, and must be translated in full (all 12)
+      system_messages {
+         compass = [north, northeast, east, southeast, south, southwest,  west, northwest, up, down, inside, outside]
+         compass_short = [n, ne, e, se, s, sw, w, nw, u, d, in, out]
+      }
+   }
+}
+```
